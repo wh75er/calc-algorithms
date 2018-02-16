@@ -57,7 +57,7 @@ def polinomialValues(xIn, yIn, n, k):
     f1 = 1; f2 = 0
     while(True):
         p = []
-        for i in range(n - 1):
+        for i in range(n):
             p.append((y[i+1]-y[i]) / (x[i+j]-x[i]))
             y[i] = p[i]
         
@@ -70,7 +70,7 @@ def polinomialValues(xIn, yIn, n, k):
 
         n-=1
         j+=1
-        if(n <= 1):
+        if(n <= 0):
             break
 
     f += f2
@@ -111,6 +111,7 @@ def printToFile(x, y):
 def main():
     n, k = inputData() #n - polinomial order
     x, y = tableInit(100)
+    printToFile(x, y)
 
     root = polinomialValues(x, y, n, k)
 
