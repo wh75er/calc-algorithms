@@ -18,22 +18,38 @@ def tableInit(n):
     return a
 
 
-def parsCord(x, y, n, k, order):
-    cls = 0
-    minim = abs(k - x[0])
-    for i in range(n):
-        if(abs(k - i) < minim):
-            minim = abs(k - i)
-            cls = i
+def parsCord(matrix, n, x, y, orderX, orderY):                   # a - matrix, n - size, x to find, y to find
+    xa = list(range(n+1))
+    ya = list(range(n+1))
+    clsX = 0
+    clsY = 0
+    minim = abs(x - xa[0])
+    for i in range(n+1):
+        if(abs(x - i) < minim):
+            minim = abs(x - i)
+            clsX = i
 
-    if(cls >= n - order):
-        x = x[n-order:]
-        y = y[n-order:]
+    minim = abs(y - ya[0])
+    for i in range(n+1):
+        if(abs(y - i) < minim):
+            minim = abs(y - i)
+            clsY = i
+
+    if(clsX >= n - orderX):
+        xa = xa[n-orderX:]
     else:
-        x = x[cls:]
-        y = y[cls:]
+        xa = xa[clsX:clsX+orderX+1]
 
-    return x,y
+    if(clsY >= n - orderY):
+        ya = ya[n-orderY:]
+    else:
+        ya = ya[clsY:clsY+orderY+1]
+
+    parsedMatrix = matrix[ya[0]:ya[len(ya)-1]+1]
+    for i in range(len(xa)):
+        parsedMatrix[i] = parsedMatrix[i][xa[0]:xa[len(xa)-1]+1]
+
+    return xa, ya, parsedMatrix
 
         
     
@@ -43,12 +59,15 @@ def parsCord(x, y, n, k, order):
 def inputData():
     os.system('clear')
 
-    print("Please, input order of polynomial:", end = ' ')
-    order = int(input())
+    orderX = int(input("Please, input order of polynomial X: "))
+    orderY = int(input("Please, input order of polynomial Y: "))
     print("\n"*2)
 
-    k = float(input("Enter the value of unknown x to find f(x): "))
-    return order, k
+    x = float(input("Enter the value of unknown x to find f(x, y): "))
+    y = float(input("Enter the value of unknown y to find f(x, y): "))
+    print("\n"*2)
+
+    return orderX, orderY, x, y
 
 
 def polinomialValues(x, y, n, k):
@@ -79,6 +98,16 @@ def polinomialValues(x, y, n, k):
 
 
 
+def bilinearValues(xa, ya, x, y, orderX, orderY, matrix):
+    # x interpolation
+    rootX = []
+    for i in range(len(ya)):
+        rootX.append(polinomialValues(xa, matrix[i], orderX, x))
+    root = polinomialValues(ya, rootX, orderY, y)
+    return root
+
+
+
 def printTable(a):
     for i in a:
         for j in i:
@@ -88,15 +117,15 @@ def printTable(a):
 
 
 def main():
-    n, k = inputData() #n - polinomial order
-    a = tableInit(5)
-    printTable(a)
+    nx, ny, x, y = inputData() #n - polinomial order
+    matrix = tableInit(5)
+    printTable(matrix)
 
-#    x, y = parsCord(xIn, yIn, 100, k, n)
-#    root = polinomialValues(x, y, n, k)
+    xa, ya, parsedMatrix= parsCord(matrix, 5, x, y, nx, ny)
+    root = bilinearValues(xa, ya, x, y, nx, ny, parsedMatrix)
 
-#    print("\nf(x) where x is {} = {:.2f}".format(k, root))
-#    print("Accurate value is {:.2f}".format(func(k)), end = '\n\n')
+    print("\nf(x, y) where x is {} and y is {} = {:.2f}".format(x, y, root))
+    print("Accurate value is {:.2f}".format(func(x, y)), end = '\n\n')
 
 #--------------------------------------------------------------------------------------
     
