@@ -1,6 +1,7 @@
 # Newton polynomial interpolation
 
 import os
+import tableprint as tp
 
 
 def func(x, y):
@@ -109,26 +110,31 @@ def bilinearValues(xa, ya, x, y, orderX, orderY, matrix):
 
 
 def printTable(a):
-    for i in a:
-        for j in i:
-            print(j, end = "\t")
-        print("\n")
+#    for i in a:
+#        for j in i:
+#            print(j, end = "\t")
+#        print("\n")
+    tp.table(a, None, '5g', 4, 'fancy_grid')
+    
     
 
 
 def main():
     nx, ny, x, y = inputData() #n - polinomial order
     matrix = tableInit(5)
-    printTable(matrix)
 
     xa, ya, parsedMatrix= parsCord(matrix, 5, x, y, nx, ny)
     root = bilinearValues(xa, ya, x, y, nx, ny, parsedMatrix)
 
     print("\nf(x, y) where x is {} and y is {} = {:.2f}".format(x, y, root))
     print("Accurate value is {:.2f}".format(func(x, y)), end = '\n\n')
+    printTable(matrix)
 
 #--------------------------------------------------------------------------------------
     
+
+
+
 
 if __name__ == "__main__":
     main()
