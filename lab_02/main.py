@@ -110,11 +110,11 @@ def bilinearValues(xa, ya, x, y, orderX, orderY, matrix):
 
 
 
-def printTable(a):
-#    for i in a:
-#        for j in i:
-#            print(j, end = "\t")
-#        print("\n")
+def printTable(ax):
+    a = []
+    for i in ax:
+        a.append(i[:])
+
     for i in range(6):
         a[i].insert(0, i)
     print(tp.top(7, 3))
@@ -129,6 +129,7 @@ def printTable(a):
 def main():
     matrix = tableInit(5)
     printTable(matrix)
+
     nx, ny, x, y = inputData() #n - polinomial order
 
     xa, ya, parsedMatrix= parsCord(matrix, 5, x, y, nx, ny)
