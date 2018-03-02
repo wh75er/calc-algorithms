@@ -2,6 +2,7 @@
 
 import os
 import tableprint as tp
+import pdb
 
 
 def func(x, y):
@@ -47,7 +48,7 @@ def parsCord(matrix, n, x, y, orderX, orderY):                   # a - matrix, n
         ya = ya[clsY:clsY+orderY+1]
 
     parsedMatrix = matrix[ya[0]:ya[len(ya)-1]+1]
-    for i in range(len(xa)):
+    for i in range(len(parsedMatrix)):
         parsedMatrix[i] = parsedMatrix[i][xa[0]:xa[len(xa)-1]+1]
 
     return xa, ya, parsedMatrix
@@ -114,7 +115,13 @@ def printTable(a):
 #        for j in i:
 #            print(j, end = "\t")
 #        print("\n")
-    tp.table(a, None, '5g', 4, 'fancy_grid')
+    for i in range(6):
+        a[i].insert(0, i)
+    print(tp.top(7, 3))
+    print(tp.row(["x/y", 0, 1, 2, 3, 4, 5], 3))
+    print(tp.bottom(7, 3))
+    print("")
+    tp.table(a, None, '5g', 5, 'fancy_grid')
     
     
 
