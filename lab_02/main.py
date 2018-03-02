@@ -10,6 +10,7 @@ def func(x, y):
 
 
 def tableInit(n):
+    os.system('clear')
     a = []
     for i in range(n+1):
         b = []
@@ -59,7 +60,6 @@ def parsCord(matrix, n, x, y, orderX, orderY):                   # a - matrix, n
 
 
 def inputData():
-    os.system('clear')
 
     orderX = int(input("Please, input order of polynomial X: "))
     orderY = int(input("Please, input order of polynomial Y: "))
@@ -120,22 +120,22 @@ def printTable(a):
     print(tp.top(7, 3))
     print(tp.row(["x/y", 0, 1, 2, 3, 4, 5], 3))
     print(tp.bottom(7, 3))
-    print("")
+    print("\r", end='\r\r\r')
     tp.table(a, None, '5g', 5, 'fancy_grid')
     
     
 
 
 def main():
-    nx, ny, x, y = inputData() #n - polinomial order
     matrix = tableInit(5)
+    printTable(matrix)
+    nx, ny, x, y = inputData() #n - polinomial order
 
     xa, ya, parsedMatrix= parsCord(matrix, 5, x, y, nx, ny)
     root = bilinearValues(xa, ya, x, y, nx, ny, parsedMatrix)
 
     print("\nf(x, y) where x is {} and y is {} = {:.2f}".format(x, y, root))
     print("Accurate value is {:.2f}".format(func(x, y)), end = '\n\n')
-    printTable(matrix)
 
 #--------------------------------------------------------------------------------------
     
