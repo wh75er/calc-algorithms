@@ -1,6 +1,7 @@
 # Spline polinomial
 
 import os
+import tableprint as tp
 
 
 
@@ -17,7 +18,7 @@ def inputData():
 
 
 def func(x):
-    return x**3/3
+    return x**3
 
 
 def tableInit(l, r, n):
@@ -31,48 +32,62 @@ def tableInit(l, r, n):
 
 
 def getValues(x, a):
+    n = len(x)
 
     # get step between points
     h = []
-    for i in range(len(x)-1): h.append(x[i+1] - x[i])
+    for i in range(n-1): 
+        h.append(x[i+1] - x[i])
 
-    # find matrix A
-    A = [0] * len(x) 
-    for i in range(1, len(x)-1): 
-        A[i] = (3 * (a[i+1]-a[i]) / h[i] - 3 * (a[i] - a[i-1]) / h[i-1])
+    A = []
+    for i in range(n-1):
+        A.append((3./h[i])*(a[i+1]-a[i])-(3./h[i-1])*(a[i] - a[i-1]))
 
-    print(len(A))
-
-    # solution for system
-    l = [0] * (len(x) + 1)
-    u = [0] * (len(x) + 1)
-    z = [0] * (len(x) + 1)
-
+    l, u, z = [0] * (n+1), [0] * n, [0] * (n+1)
     l[0] = 1
     u[0] = 0
     z[0] = 0
-    for i in range(1, len(x)-1):
-        l[i] = 2 * (x[i+1] - x[i]) - h[i-1] * u[i-1]
+
+    for i in range(1, n-1):
+        l[i] = 2*(x[i+1] - x[i-1]) - h[i-1]*u[i-1]
         u[i] = h[i]/l[i]
-        z[i] = (A[i] - h[i-1] * z[i-1]) / l[i]
+        z[i] = (A[i] - h[i-1]*z[i-1])/l[i]
 
-    l[len(x)] = 1
-    z[len(x)] = 0
-    c = [0] * (len(x) + 1)
-    c[len(x)] = 0
 
-    # find values
-    b = [0] * len(x)
-    c = [0] * len(x)
-    d = [0] * len(x)
-    for j in range(len(x)-1, -1, -1):
-        print(j)
-        c[j] = z[j] - u[j] * c[j+1]                     # error ocures here
-        d[j] = (a[j+1] - a[j]) / h[j] - h[j] * (c[j+1] + 2 * c[j]) / 3
-        d[j] = (c[j+1] - c[j]) / (3 * h[j])
+    b, c, d = [0] * n, [0] * (n+1), [0] * n
+    l[n] = 1
+    z[n] = 0
+    c[n] = 0
+
+    for j in range(n-2, -1, -1):
+        c[j] = z[j] - u[j]*c[j+1]
+        b[j] = (a[j+1] - a[j])/h[j] - h[j]*(c[j+1] + 2*c[j])/3.
+        d[j] = (c[j+1] - c[j])/(3*h[j])
+
 
     return b, c, d
+
+
+def getRoot(k, x, a, b, c, d):
+    n = len(x)
+    j = 0
+    minim = abs(k - x[0])
+    for i in range(n):
+        if(abs(k - x[i]) < minim):
+            minim = abs(k - x[i])
+            j = i
     
+    return a[j] + b[j]*(k-x[j]) + c[j]*(k-x[j])**2 + d[j]*(k-x[j])
+    
+
+def buildTable(a, b, c, d):
+    n = len(a)
+    print(tp.header(['i', 'ai', 'bi', 'ci', 'di'], 10))
+    for i in range(n):
+        print(tp.row([i, "{:.3f}".format(a[i]), "{:.3f}".format(b[i]), \
+            "{:.3f}".format(c[i]), "{:.3f}".format(d[i])], 10))
+    print(tp.bottom(5, 10))
+
 
 
 
@@ -80,10 +95,10 @@ def main():
     left, right, step, k = inputData()
     x, a = tableInit(left, right, step)
     b, c, d = getValues(x, a)
-    print("i\t\tai\t\tbi\t\tci\t\tdi")
-    for i in range(len(x)):
-        print(i, "\t\t", a[i], "\t\t", b[i], "\t\t", c[i], "\t\t", d[i])
-    
+    root = getRoot(k, x, a, b, c, d)                # get result of interpolation
+    buildTable(a, b, c, d)
+    print("\nf(x) where x is {} = {:.2f}".format(k, root))
+    print("Accurate value is {:.2f}".format(func(k)), end = '\n\n')
 
 
 
