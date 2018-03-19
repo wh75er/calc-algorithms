@@ -73,11 +73,13 @@ def getRoot(k, x, a, b, c, d):
     j = 0
     minim = abs(k - x[0])
     for i in range(n):
-        if(abs(k - x[i]) < minim):
+        if(abs(k - x[i]) < minim and k > x[i]):
+            print(minim)
             minim = abs(k - x[i])
             j = i
+
     
-    return a[j] + b[j]*(k-x[j]) + c[j]*(k-x[j])**2 + d[j]*(k-x[j])
+    return a[j] + b[j]*(k-x[j]) + c[j]*(k-x[j])**2 + d[j]*(k-x[j])**3
     
 
 def buildTable(a, b, c, d):
