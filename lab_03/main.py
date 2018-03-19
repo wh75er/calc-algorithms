@@ -74,7 +74,6 @@ def getRoot(k, x, a, b, c, d):
     minim = abs(k - x[0])
     for i in range(n):
         if(abs(k - x[i]) < minim and k > x[i]):
-            print(minim)
             minim = abs(k - x[i])
             j = i
 
