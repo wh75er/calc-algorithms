@@ -84,9 +84,13 @@ def getRoot(k, x, a, b, c, d):
 def buildTable(a, b, c, d):
     n = len(a)
     print(tp.header(['i', 'ai', 'bi', 'ci', 'di'], 10))
-    for i in range(n):
-        print(tp.row([i, "{:.3f}".format(a[i]), "{:.3f}".format(b[i]), \
-            "{:.3f}".format(c[i]), "{:.3f}".format(d[i])], 10))
+    num = 1
+    for i in range(1, n-1):
+        print(tp.row([num, "{:.3f}".format(a[i]), "{:.3f}".format(b[i]), \
+            "{:.3f}".format(c[i]), "{:.3f}".format(d[i-1])], 10))
+        num += 1
+    print(tp.row([num, "{:.3f}".format(a[n-1]), "{:.3f}".format(b[0]), \
+        "{:.3f}".format(c[n-1]), "{:.3f}".format(d[n-1])], 10))
     print(tp.bottom(5, 10))
 
 
